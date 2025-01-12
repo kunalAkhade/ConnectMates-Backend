@@ -41,10 +41,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(customizer -> customizer.disable()) // Disable CSRF for stateless APIs
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers("/api/v1/auth/**"
-                                        ,"/api/v1/post/**","/**")
+                                .requestMatchers("/api/v1/auth/**")
                                 .permitAll()  // Allow all requests to /api/v1/auth/**
                                 .anyRequest().authenticated()
                 )
@@ -79,5 +79,22 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
 
+    }
+
+    @Bean
+    public org.springframework.web.filter.CorsFilter corsFilter() {
+        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+        config.addAllowedOrigin("http://localhost:3000"); // Frontend URL
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedHeader("*"); // Allow all headers
+        config.setAllowCredentials(true); // Allow credentials if necessary
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);  // Apply CORS to all endpoints
+
+        return new org.springframework.web.filter.CorsFilter(source);
     }
 }

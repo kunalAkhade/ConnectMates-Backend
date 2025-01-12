@@ -7,6 +7,8 @@ import com.example.connectMates.entities.Category;
 import com.example.connectMates.entities.User;
 import com.example.connectMates.entities.UserCategory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +65,20 @@ public class UserService {
     public Set<User> getFollowers(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         return userOptional.map(User::getFollowers).orElse(null);
+    }
+
+    public User getAuthUser(){
+      if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+          return null;
+      }
+        System.out.println("*****"+SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+      UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(userDetails.getUsername());
+      User user = userRepository.findByUsername(userDetails.getUsername());
+     if(user!=null){
+         return user;
+     }
+      return null;
     }
 
     public Map<String, Object> getUser(Long id){

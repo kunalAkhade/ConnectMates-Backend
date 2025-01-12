@@ -75,6 +75,6 @@ public class AuthServices {
         } catch (Exception e) {
             log.error("Authentication failed: ", e);
         }
-        return "Invalid Credentials";
+        return "INVALID_CRED";
     }
 }

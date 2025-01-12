@@ -59,7 +59,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             } catch (Exception e) {
                 // Log the error if username extraction or token validation fails
+               // System.out.println("*******"+SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+                SecurityContextHolder.clearContext();
                 logger.error("JWT Authentication failed: " + e.getMessage());
+
             }
         }
 

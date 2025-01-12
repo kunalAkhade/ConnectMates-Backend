@@ -26,6 +26,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> map){
-        return new ResponseEntity<>(authServices.loginUser(map), HttpStatus.ACCEPTED);
+        Object authResult = authServices.loginUser(map);
+        if(authResult!="INVALID_CRED"){
+            return new ResponseEntity<>(authServices.loginUser(map), HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(authServices.loginUser(map), HttpStatus.UNAUTHORIZED);
     }
 }

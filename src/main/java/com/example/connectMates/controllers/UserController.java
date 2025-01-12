@@ -43,4 +43,13 @@ public class UserController {
     public ResponseEntity<Set<User>> getFollowers(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.getFollowers(userId), HttpStatus.OK);
     }
+
+    @GetMapping("/getAuthenticatedUser")
+    public ResponseEntity<?> getAuthUser(){
+        User user = userService.getAuthUser();
+        if(user!=null){
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("", HttpStatus.FORBIDDEN);
+    }
 }

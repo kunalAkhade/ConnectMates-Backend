@@ -20,4 +20,7 @@ public class HomeController {
     public ResponseEntity<?> getHomePageContent(){
         return new ResponseEntity<>(postService.getALLPosts(), HttpStatus.OK);
     }
+
+
+
 }
